@@ -2,35 +2,77 @@
 #include <string.h>
 #include "funciones.h"
 
+
 void agregarProducto(int *cantidadProductos, char productos[5][50], float tiemposFabricacion[5], float costoProducción[5], float cantidadesDemandadas[5]) {
     if (*cantidadProductos < 5) {
         printf("Nombre del producto: ");
-        scanf("%s", productos[*cantidadProductos]);
-        printf("Tiempo de fabricacion del producto en horas: ");
-        scanf("%f", &tiemposFabricacion[*cantidadProductos]);
-        printf("Costo de produccion del producto: ");
-        scanf("%f", &costoProducción[*cantidadProductos]);
-        printf("Cantidad demandada del producto: ");
-        scanf("%f", &cantidadesDemandadas[*cantidadProductos]);
+        getchar();
+        fgets(productos[*cantidadProductos], 50, stdin);
+        do {
+            printf("Tiempo de fabricacion del producto en horas (debe ser positivo): ");
+            scanf("%f", &tiemposFabricacion[*cantidadProductos]);
+            if (tiemposFabricacion[*cantidadProductos] < 0) {
+                printf("Error: No se permiten valores negativos.\n");
+            }
+        } while (tiemposFabricacion[*cantidadProductos] < 0);
+
+        do {
+            printf("Costo de produccion del producto (debe ser positivo): ");
+            scanf("%f", &costoProducción[*cantidadProductos]);
+            if (costoProducción[*cantidadProductos] < 0) {
+                printf("Error: No se permiten valores negativos.\n");
+            }
+        } while (costoProducción[*cantidadProductos] < 0);
+
+        do {
+            printf("Cantidad demandada del producto (debe ser positiva): ");
+            scanf("%f", &cantidadesDemandadas[*cantidadProductos]);
+            if (cantidadesDemandadas[*cantidadProductos] < 0) {
+                printf("Error: No se permiten valores negativos.\n");
+            }
+        } while (cantidadesDemandadas[*cantidadProductos] < 0);
+
         (*cantidadProductos)++;
     } else {
         printf("No se pueden agregar más productos.\n");
     }
 }
 
+
+
 void editarProducto(int cantidadProductos, char productos[5][50], float tiemposFabricacion[5], float costoProducción[5], float cantidadesDemandadas[5]) {
     char nombre[50];
     printf("\nNombre del producto que quiere editar: ");
-    scanf("%s", nombre);
+    getchar();
+    fgets(nombre, 50, stdin);
 
     for (int i = 0; i < cantidadProductos; i++) {
         if (strcmp(productos[i], nombre) == 0) {
-            printf("Nuevo tiempo de fabricacion del producto en horas: ");
-            scanf("%f", &tiemposFabricacion[i]);
-            printf("Nuevo costo de produccion del producto: ");
-            scanf("%f", &costoProducción[i]);
-            printf("Nueva cantidad demandada del producto: ");
-            scanf("%f", &cantidadesDemandadas[i]);
+            do {
+                printf("Nuevo tiempo de fabricacion del producto en horas (positivo): ");
+                scanf("%f", &tiemposFabricacion[i]);
+                if (tiemposFabricacion[i] < 0) {
+                    printf("El tiempo de fabricación no puede ser negativo.\n");
+                }
+            } while (tiemposFabricacion[i] < 0);
+
+            do {
+                printf("Nuevo costo de produccion del producto (positivo): ");
+                scanf("%f", &costoProducción[i]);
+                if (costoProducción[i] < 0) {
+                    printf("El costo de producción no puede ser negativo.\n");
+                }
+            } while (costoProducción[i] < 0);
+
+            do {
+                printf("Nueva cantidad demandada del producto (positivo): ");
+                scanf("%f", &cantidadesDemandadas[i]);
+                if (cantidadesDemandadas[i] < 0) {
+                    printf("La cantidad demandada no puede ser negativa.\n");
+                }
+            } while (cantidadesDemandadas[i] < 0);
+
+            getchar(); 
             return;
         }
     }
@@ -40,7 +82,8 @@ void editarProducto(int cantidadProductos, char productos[5][50], float tiemposF
 void eliminarProducto(int *cantidadProductos, char productos[5][50], float tiemposFabricacion[5], float costoProducción[5], float cantidadesDemandadas[5]) {
     char nombre[50];
     printf("\nNombre del producto a eliminar: ");
-    scanf("%s", nombre);
+    getchar();
+    fgets(nombre, 50, stdin);
 
     for (int i = 0; i < *cantidadProductos; i++) {
         if (strcmp(productos[i], nombre) == 0) {
@@ -51,10 +94,11 @@ void eliminarProducto(int *cantidadProductos, char productos[5][50], float tiemp
                 cantidadesDemandadas[j] = cantidadesDemandadas[j + 1];
             }
             (*cantidadProductos)--;
+            printf("Producto eliminado correctamente.\n");
             return;
         }
     }
-    printf("Producto no encontrado\n");
+    printf("Producto no encontrado.\n");
 }
 
 void calcularProduccion(int cantidadProductos, char productos[5][50], float tiemposFabricacion[5], float costoProducción[5], float cantidadesDemandadas[5], float tiempoDisponible, float presupuestoDisponible) {
